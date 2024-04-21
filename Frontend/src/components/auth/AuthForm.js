@@ -23,7 +23,6 @@ const AuthForm = ({ onSubmit, isAdmin }) => {
         e.preventDefault();
         onSubmit({ inputs, signup: isAdmin ? false : isSignup });
 
-
     }
 
     return (

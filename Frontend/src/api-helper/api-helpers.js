@@ -1,4 +1,7 @@
 import axios from 'axios';
+
+
+
 export const getAllMovies = async () => {
     const resp = await axios.get("/movies")
         .catch(err => console.log(err))
@@ -12,6 +15,7 @@ export const getAllMovies = async () => {
 
 }
 export const sendUserAuthRequest = async (data, signup) => {
+
     const res = await axios.post(`/users/${signup ? "signup" : "login"}`, {
         name: signup ? data.name : "",
         email: data.email,
@@ -117,7 +121,7 @@ export const addMovie = async (data) => {
             Authorization: `Bearer ${localStorage.getItem("token")}`
         }
     }).catch((err) => console.log(err))
-   
+
     console.log(res.status)
 
     if (res.status !== 201) {

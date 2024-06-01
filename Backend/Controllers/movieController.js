@@ -1,120 +1,110 @@
-const Movies=require("../Models/Movie");
-const jwt=require('jsonwebtoken');
-const mongoose=require('mongoose');
+const Movies = require("../Models/Movie");
+const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 const admin = require("../Models/admin");
 
-const addMovies=async(req,res)=>{
-    
-    const extractToken= req.headers.authorization.split(" ")[1];
+const addMovies = async (req, res) => {
 
-    if(!extractToken && extractToken.trim()===""){
+    const extractToken = req.headers.authorization.split(" ")[1];
+
+    if (!extractToken && extractToken.trim() === "") {
         return res.status(401).json({
-            message:"no Token provided"
+            message: "no Token provided"
         })
     }
-    console.log(extractToken);
     let adminId;
-    jwt.verify(extractToken,process.env.SECERT_KEY,(err,decrypted)=>{
-        if(err)
-        {
+    jwt.verify(extractToken, process.env.SECERT_KEY, (err, decrypted) => {
+        if (err) {
             return res.status(401).json({
-                message:"Invalid Token",
+                message: "Invalid Token",
             });
         }
-        else{
-            adminId=decrypted.id;
+        else {
+            adminId = decrypted.id;
             return;
         }
     })
 
-    const {title,description,releaseDate,posterUrl,featured,actors}=req.body;
-    console.log(req.body);
+    const { title, description, releaseDate, posterUrl, featured, actors } = req.body;
 
-        if(res.status==400)
-        {
-            res.send("error");
-        }
-    if(!title && title.trim() === "" && !description && description.trim()=== "" && !posterUrl&&posterUrl.trim()=== "")
-    {
+    if (res.status == 400) {
+        res.send("error");
+    }
+    if (!title && title.trim() === "" && !description && description.trim() === "" && !posterUrl && posterUrl.trim() === "") {
         return res.status(422).json({
-            message:"Invalid Inputs"
-        }) 
+            message: "Invalid Inputs"
+        })
     }
 
     let movie;
-    try{
-        movie=new Movies({
+    try {
+        movie = new Movies({
             title,
             description,
             releaseDate: new Date(`${releaseDate}`),
             posterUrl,
             featured,
-            admin:adminId,
+            admin: adminId,
             actors
         })
-        
-        const session=await mongoose.startSession();
-        const adminUser= await admin.findById(adminId);
+
+        const session = await mongoose.startSession();
+        const adminUser = await admin.findById(adminId);
 
         session.startTransaction();
-        await movie.save({session})
+        await movie.save({ session })
         adminUser.addedMovies.push(movie);
-        await adminUser.save({session});
+        await adminUser.save({ session });
 
         await session.commitTransaction();
     }
-    catch(err)
-    {
+    catch (err) {
         return res.send(err.message);
     }
-    if(!movie)
-    {
+    if (!movie) {
         return res.status(500).json({
-            message:"something went wrong"
+            message: "something went wrong"
         })
     }
-    return res.status(201).json({movie})
+    return res.status(201).json({ movie })
 }
 
-const getallMovies=async(req,res,next)=>{
+const getallMovies = async (req, res, next) => {
     let movies;
-    try{
-        movies=await Movies.find();
+    try {
+        movies = await Movies.find();
     }
-    catch(err){
+    catch (err) {
         return res.send(err.message);
     }
-    if(!movies)
-    {
+    if (!movies) {
         return res.status(500).json({
-            message:"something went wrong"
+            message: "something went wrong"
         })
     }
-    return res.status(200).json({movies})
+    return res.status(200).json({ movies })
 
 }
 
 
 
-const getMoviesbyId=async(req,res)=>{
-    const id=req.params.id;
+const getMoviesbyId = async (req, res) => {
+    const id = req.params.id;
     let movie;
-    try{
-        movie=await Movies.findById(id);
+    try {
+        movie = await Movies.findById(id);
 
     }
-    catch(err)
-    {
+    catch (err) {
         return res.send(err.message);
     }
 
-    if(!movie)
-    {
+    if (!movie) {
         return res.status(404).json({
-            message:'movie not found'
+            message: 'movie not found'
         })
     }
-return res.status(200).json({movie});
+    return res.status(200).json({ movie });
 
 }
-module.exports={addMovies,getallMovies,getMoviesbyId}
+module.exports = { addMovies, getallMovies, getMoviesbyId }

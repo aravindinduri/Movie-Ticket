@@ -12,10 +12,10 @@ const adminSchema=new mongoose.Schema({
         minLength:6,
         required:true,
     },
-    addedMovies:[{
+    addedMovies:[
+        {
         type:mongoose.Types.ObjectId,
-        ref:"Movies"
-        
+        ref:"Movies" 
     },
     ],
 })

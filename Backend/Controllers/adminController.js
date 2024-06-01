@@ -43,7 +43,6 @@ const adminlogin = async (req, res) => {
     let existingAdmin;
     try {
         existingAdmin = await admin.findOne({ email })
-        console.log(existingAdmin)
     }
     catch (err) {
         return res.send(err);

@@ -5,8 +5,7 @@ import { getAllMovies } from '../api-helper/api-helpers'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { adminActions, userActions } from '../store'
-// import {Link,Routes,Route} from 'react-router-dom';
-// const dummyArray=["IronMan","Pathaan","Selfie","ABCD"]
+
 
 const Header = () => {
   const dispatch = useDispatch();

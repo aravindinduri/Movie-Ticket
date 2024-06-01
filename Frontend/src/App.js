@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Route, Routes ,useNavigate} from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Admin from "./components/admin/Admin";
 import Auth from "./components/auth/Auth";
 import Booking from "./components/Bookings/Booking";
@@ -10,11 +10,9 @@ import AddMovies from "./components/Movies/AddMovies";
 import Movies from "./components/Movies/Movies";
 import AdminProfile from "./Profile/AdminProfile";
 import UserProfile from "./Profile/UserProfile";
-import Userp from "./Profile/Userp";
 import { adminActions, userActions } from "./store";
 
 function App() {
-  const navigate = useNavigate()
   const dispatch = useDispatch();
   const isAdminLoggedIn = useSelector((state) => state.admin.isLoggedIn);
   const isUserLoggedIn = useSelector((state) => state.user.isLoggedIn);
@@ -43,7 +41,6 @@ function App() {
           <Route path="/booking/:id" element={<Booking />} />
           <Route path="/user" element={<UserProfile />} />
           <Route path="/user-admin" element={<AdminProfile />} />
-          {/* <Route path="/user" element={<Userp />} /> */}
           <Route path="/add" element={<AddMovies />} />
         </Routes>
       </section>

@@ -36,6 +36,7 @@ export const sendAdminAuthRequest = async (data) => {
     }).catch(err => {
         console.log(err);
     })
+    console.log(res)
     if (res.status !== 200) {
         return console.log('unexprected');
     }
